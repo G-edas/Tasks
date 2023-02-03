@@ -13,8 +13,8 @@ def converter(a):
     
     
     number_to_append = []
-    number_to_remove = []
     number_tuple = tuple()
+    new_list = []
     number = str(a)
     number_list = list(str(number))
     for i in range(len(number_list)):
@@ -22,6 +22,7 @@ def converter(a):
         number_to_append.append(number_list[i] + int(len(number_list) - i - 1) * '0')
         number_to_append = [int(el) for el in number_to_append]
         number_to_append_without_0 = [item for item in number_to_append if item != 0]
+    print(number_to_append_without_0)
 
     for i in range(len(number_to_append_without_0)):
         counter = list(str(number_to_append_without_0[i])).count('0')
@@ -29,19 +30,20 @@ def converter(a):
             counter = 'none'
         if(len(str(number_to_append_without_0[i])) - 1 == counter and counter !=1 ):
             
-            number_tuple = number_tuple + ( int(str(number_to_append_without_0[i])[0]), 
-                                            round(number_to_append_without_0[i] / int(str(number_to_append_without_0[i])[0]))
-                                            )
-            tuple_to_list = list(number_tuple)
+            number_to_append_without_0[i] = list(number_tuple + (
+                                                int(str(number_to_append_without_0[i])[0])
+                                                ,round(number_to_append_without_0[i]/ int(str(number_to_append_without_0[i])[0]))
+                                                ))
             
-            number_to_remove.append(number_to_append_without_0[i])
-            
-    new_list = [el for el in tuple_to_list + number_to_append_without_0 if el not in number_to_remove]
-
-    print(new_list)
+            result = []
+            for item in number_to_append_without_0:
+                if isinstance(item, list):
+                    result.extend(item)
+                else:   
+                    result.append(item)
 
     number_in_words = ''
-    for list_item in new_list:
+    for list_item in result:
         for dict_key in sorted_number_dict.keys():
             if dict_key == list_item:
                 number_in_words += ''+sorted_number_dict[dict_key]+' '
@@ -49,5 +51,5 @@ def converter(a):
     return number_in_words
 
   
-print(converter(777))
+print(converter(10001))
 
