@@ -10,46 +10,68 @@ def converter(a):
     }
     sort_data = sorted(number_dict.items(), reverse=True)
     sorted_number_dict = dict(sort_data)
-    
-    
     number_to_append = []
     number_tuple = tuple()
-    new_list = []
     number = str(a)
-    number_list = list(str(number))
-    for i in range(len(number_list)):
+    number_list = list(number)
+
+    if(len(number) < 5):
+
+        for i in range(len(number_list)):
+            
+            number_to_append.append(number_list[i] + int(len(number_list) - i - 1) * '0')
+            number_to_append = [int(el) for el in number_to_append]
+            number_to_append_without_0 = [item for item in number_to_append if item != 0]
         
-        number_to_append.append(number_list[i] + int(len(number_list) - i - 1) * '0')
-        number_to_append = [int(el) for el in number_to_append]
-        number_to_append_without_0 = [item for item in number_to_append if item != 0]
-    print(number_to_append_without_0)
-
-    for i in range(len(number_to_append_without_0)):
-        counter = list(str(number_to_append_without_0[i])).count('0')
-        if(counter == 0):
-            counter = 'none'
-        if(len(str(number_to_append_without_0[i])) - 1 == counter and counter !=1 ):
+        if(sum(number_to_append_without_0[-2:]) in range(11,20)):
             
-            number_to_append_without_0[i] = list(number_tuple + (
-                                                int(str(number_to_append_without_0[i])[0])
-                                                ,round(number_to_append_without_0[i]/ int(str(number_to_append_without_0[i])[0]))
-                                                ))
-            
-            result = []
-            for item in number_to_append_without_0:
-                if isinstance(item, list):
-                    result.extend(item)
-                else:   
-                    result.append(item)
-
-    number_in_words = ''
-    for list_item in result:
-        for dict_key in sorted_number_dict.keys():
-            if dict_key == list_item:
-                number_in_words += ''+sorted_number_dict[dict_key]+' '
+            summed_digits = sum(number_to_append_without_0[-2:])
+            del number_to_append_without_0[-2:]
+            number_to_append_without_0.append(summed_digits)
+    
+        for i in range(len(number_to_append_without_0)):          
+            counter = list(str(number_to_append_without_0[i])).count('0')
+            if(counter == 0):
+                counter = 'none'
+            if(len(str(number_to_append_without_0[i])) - 1 == counter and counter !=1 ):
                 
-    return number_in_words
+                number_to_append_without_0[i] = list(number_tuple + (
+                                                    int(str(number_to_append_without_0[i])[0])
+                                                    ,round(number_to_append_without_0[i]/ int(str(number_to_append_without_0[i])[0]))
+                                                    ))
+                
+        result = []
+        for item in number_to_append_without_0:
+            if isinstance(item, list):
+                result.extend(item)
+            else:   
+                result.append(item)
+        print(result)
 
-  
-print(converter(10001))
+        number_in_words = ''
+        for list_item in result:
+            for dict_key in sorted_number_dict.keys():
+                if dict_key == list_item:
+                    number_in_words += ''+sorted_number_dict[dict_key]+' '
+                        
+        return number_in_words
+       
+    elif(len(number) >= 5):
+        
+        if(len(number) in range(5, 7)):
+            parsing_number = [int(number) // 1000, 1000,  int(number) % 1000]
+            # print(1250000 % 1000000)
+        elif(len(number) in range(7, 10)):
+            parsing_number = [int(number) // 1000000, 1000000,  int(number) % 1000000]
+        elif(len(number) in range(10,13)):
+            parsing_number = [int(number) // 1000000000, 1000000000,  int(number) % 1000000000]
+        
+        print(parsing_number)
+        full_word = ''
+        for el in parsing_number:
+            full_word = full_word + converter(el)
+        return full_word  
+
+
+print(converter(2222))
 
