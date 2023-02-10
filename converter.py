@@ -8,6 +8,8 @@ def number_converter(n):
     number = str(n)
     number_list = list(number)
     minus = ''
+    full_word = ''
+
     
     if(number[0] == '-'):
             minus = 'minus '
@@ -23,10 +25,10 @@ def number_converter(n):
             
         else:   
             for i in range(len(number_list)):
-                
+                            
                 numbers_devided.append(number_list[i] + int(len(number_list) - i - 1) * '0')
                 numbers_devided = [int(el) for el in numbers_devided]
-                numbers_devided = [item for item in numbers_devided if item != 0]
+                numbers_devided = [item for item in numbers_devided if item != constants.ZERO]
             
             if(sum(numbers_devided[-2:]) in constants.numberTEEN):
                 
@@ -36,7 +38,7 @@ def number_converter(n):
                 
             for i in range(len(numbers_devided)):          
                 counter = list(str(numbers_devided[i])).count('0')
-                if(counter == 0):
+                if(counter == constants.ZERO):
                     counter = 'none'
                 if(len(str(numbers_devided[i])) - 1 == counter and counter !=1 ):
                     
@@ -50,24 +52,25 @@ def number_converter(n):
                 result.extend(item)
             else:   
                 result.append(item)
-
+                
+        if not result:
+            result.append(constants.ZERO)
+        
         number_in_words = ''
         for list_item in result:
             for dict_key in constants.sorted_number_dict.keys():
                 if dict_key == list_item:
-                    number_in_words += ''+constants.sorted_number_dict[dict_key]+' '
-                        
-        return number_in_words
-       
+                    number_in_words += constants.sorted_number_dict[dict_key]+' '
+        
+        return minus + number_in_words.rstrip()
+
     elif(len(number) >= 5):
         
         constants.number_devidor(number)
         
-    full_word = ''
-    for el in constants.number_devidor(number):
-        full_word = full_word + number_converter(el)
-       
-    return minus + full_word
-    
-print(number_converter(-132481981564))
+        for el in constants.number_devidor(number):
+            full_word = full_word + number_converter(el) + ' '
+            
+    return minus + full_word.rstrip()
 
+print(number_converter(-240))
