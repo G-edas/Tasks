@@ -1,0 +1,18 @@
+{% block title %} Creating New To-Do {% endblock %}
+
+{% block content %}
+
+<form action="{{ url_for("post_todo") }}">
+        <input type="submit" value="New To-Do">
+</form>
+
+<br>
+<br>
+
+{% for todo in all_todos %}
+<li>{{todo.title}} - {{todo.description}} <form action="{{ url_for("get_todo" , id = todo.id) }}">
+        <input type="submit" value="See Description">
+</form></li>
+{% endfor %}
+
+{% endblock %}

@@ -1,6 +1,23 @@
 import constants
-import logging
+import time
 
+def decorator_converter(func):
+    
+    print('program is starting...')
+    
+    def wrapped_function(*args):
+        st = time.time()
+        result = func(*args)
+        et = time.time()
+        print(et-st)
+        return result
+    
+    return wrapped_function
+
+
+    
+    
+@decorator_converter
 def number_converter(n):
     
     numbers_devided = []
@@ -73,4 +90,9 @@ def number_converter(n):
             
     return minus + full_word.rstrip()
 
-print(number_converter(-240))
+
+print(number_converter(45424674376))
+
+
+
+

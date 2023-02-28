@@ -1,0 +1,28 @@
+{% block content %}
+    <h1 class="title">{% block title %} Here is your selected To-Do {% endblock %}</h1>
+    <div class="content">
+            <li><label>Title: </label><b>{{ todo.title }}</b></li>
+            <br>
+            <br>
+            <li><label>Description: </label>{{todo.description}}</li>
+    </div>
+    <br>
+    <br>
+    <form action="{{ url_for("update_todo", id = todo.id) }}">
+        <input type="submit" value="Update This To-Do">
+    </form>
+
+    <br>
+    <form action="{{ url_for("delete_todo", id = todo.id) }}" method="POST">
+        <input type="submit" value="Delete This To-Do">
+    </form>
+
+    <br>
+    <form action="{{ url_for("home") }}">
+        <input type="submit" value="See all To-Do List">
+    </form>
+    
+    
+{% endblock %}
+
+ 

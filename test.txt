@@ -1,4 +1,0 @@
-https://swapi.dev/api/people/1/
-
-
-POST https://swapi.dev/api/planets/3/
