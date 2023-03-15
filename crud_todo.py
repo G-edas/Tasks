@@ -2,6 +2,10 @@ from flask import Flask, flash, jsonify, render_template, request, redirect, url
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import json
+from werkzeug.exceptions import BadRequest
+import logging
+
+
 
 db = SQLAlchemy()
 app = Flask(__name__)
@@ -13,7 +17,7 @@ db.init_app(app)
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, unique=True, nullable=False)
+    title = db.Column(db.String, nullable=False)
     created_date = db.Column(db.DateTime, nullable = False)
     description = db.Column(db.String, nullable = False)
 
@@ -28,20 +32,21 @@ def home():
 
 @app.route('/create_todo', methods=["GET" ,"POST"])
 def post_todo():
-    if request.method == "POST":
-        todo = Todo(
-            title = request.form['title'],
-            created_date = datetime.now(),
-            description = request.form['description']
-        )
-        db.session.add(todo)
-        db.session.commit()
-        flash("To-Do added successfully!")
-        return redirect(url_for("home"))
-    else:
-        return render_template("create_todo.html")
-
-
+    try:
+        if request.method == "POST":
+            todo = Todo(
+                title = request.form['title'],
+                created_date = datetime.now(),
+                description = request.form['description']
+            )
+            db.session.add(todo)
+            db.session.commit()
+            flash("To-Do added successfully!")
+            return redirect(url_for("home"))
+        else:
+            return render_template("create_todo.html")
+    except (KeyError, TypeError) as e:
+        logging.error("Exception occured", exc_info=True)
 
 @app.route('/show_todo/<int:id>', methods=["GET"])
 def get_todo(id):
@@ -71,4 +76,9 @@ def delete_todo(id):
         db.session.delete(todo)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("show_todo.html")
+
+
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    return logging.exception("Exception occurred", exc_info=(True))
